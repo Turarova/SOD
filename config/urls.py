@@ -40,6 +40,7 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
     path('docs/', include('documents.urls')),
     path('', include(router.urls)),
+    path('school/', include('school.urls')),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
