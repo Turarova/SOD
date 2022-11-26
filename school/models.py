@@ -76,7 +76,11 @@ class Student(User):
     activation_code = models.CharField(max_length=36, blank=True)
     is_student = models.BooleanField(default=True)
 
-
+    def is_active(self):
+        if self.is_student == True:
+            self.is_active = False
+            self.save(update_fields=['is_active'])
+            
     def activate_with_code(self, code):
         if str(self.activation_code) != str(code):
             raise Exception(('code does not match'))
@@ -89,10 +93,7 @@ class Student(User):
         self.activation_code = code
 
 
-    def is_active(self):
-        if self.is_student == True:
-            self.is_active = False
-            self.save(update_fields=['is_active'])
+    
 
 
 # class PasswordReset(models.Model):
