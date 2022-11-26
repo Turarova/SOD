@@ -1,0 +1,9 @@
+Django
+django-rest-passwordreset
+djangorestframework
+djangorestframework-simplejwt
+gunicorn
+Pillow
+psycopg2-binary
+PyJWT
+python-decouple
