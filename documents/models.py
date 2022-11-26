@@ -1,3 +1,9 @@
 from django.db import models
 
-# Create your models here.
+
+class Counselor(models.Model):
+    pass
+
+
+class StudentDocument(models.Model):
+    pass
