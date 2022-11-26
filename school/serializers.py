@@ -6,7 +6,6 @@ from django.contrib.auth import get_user_model
 
 
 # from .models import Student, Director
-from documents.models import Counselor
 
 # from account.models import ResetPassword
 
