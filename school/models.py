@@ -48,10 +48,28 @@ class UserManager(BaseUserManager):
 
 class Director(AbstractUser):
 
-    username = models.CharField(max_length=255, null=True, blank=True)
-    email = models.EmailField('email address', unique=True)
-    password = models.CharField(max_length=100)
-    is_active = models.BooleanField('active', default=True)
+    SCHOOL_CHOICES = (
+        ('1', 'Аламединская 1'),
+        ('38', '38 Гимназия'),
+        ('Айчурок', 'Айчурок'),
+        ('61', '61 школа'),
+        ('67', '67 школа гимназия')
+    )
+
+    date_of_birth = models.DateField(format="%d-%m-%Y", input_formats=['%d-%m-%Y', 'iso-8601'])
+    school_name = models.CharField(max_length=1, choices=SCHOOL_CHOICES)
+    students_inn = models.CharField(max_length=15, unique=True)
+    guardians_name = models.CharField(max_length=255)
+    guardians_surname = models.CharField(max_length=255)
+    guardians_number = models.IntegerField(max_length=12)
+    guardians_inn = models.CharField(max_length=255)
+    name = models.CharField(max_length=30)
+    surname = models.CharField(max_length=30)
+    middle_name = models.CharField(max_length=30)
+    characteristic = models.TextField()
+    image = models.ImageField(upload_to='students_image')
+    inn = models.CharField(max_length=15, unique=True)
+    nation = models.CharField(max_length=20)
 
     objects = UserManager()
 
