@@ -4,4 +4,6 @@ venv/
 env/
 .idea
 idea/
+.__pycache__
 __pycache__/
+.media
