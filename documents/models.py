@@ -1,7 +1,33 @@
 from django.db import models
+from school.models import Students
 
 
-class Counselor(models.Model):
+# class Counselor(models.Model):
+    # SCHOOL_CHOICES = (
+    #     ('1', 'Аламединская 1'),
+    #     ('38', '38 Гимназия'),
+    #     ('Айчурок', 'Айчурок'),
+    #     ('61', '61 школа'),
+    #     ('67', '67 школа гимназия')
+    # )
+
+    # date_of_birth = models.DateField(format="%d-%m-%Y", input_formats=['%d-%m-%Y', 'iso-8601'])
+    # school_name = models.CharField(max_length=1, choices=SCHOOL_CHOICES)
+    # students_inn = models.CharField(max_length=15, unique=True)
+    # guardians_name = models.CharField(max_length=255)
+    # guardians_surname = models.CharField(max_length=255)
+    # guardians_number = models.IntegerField(max_length=12)
+    # guardians_inn = models.CharField(max_length=255)
+    # name = models.CharField(max_length=30)
+    # surname = models.CharField(max_length=30)
+    # middle_name = models.CharField(max_length=30)
+    # characteristic = models.TextField()
+    # image = models.ImageField(upload_to='students_image')
+    # inn = models.CharField(max_length=15, unique=True)
+    # nation = models.CharField(max_length=20)
+
+
+class StudentDocument(models.Model):
     SCHOOL_CHOICES = (
         ('1', 'Аламединская 1'),
         ('38', '38 Гимназия'),
@@ -10,25 +36,21 @@ class Counselor(models.Model):
         ('67', '67 школа гимназия')
     )
 
-    date_of_birth = models.DateField(format="%d-%m-%Y", input_formats=['%d-%m-%Y', 'iso-8601'])
-    school_name = models.CharField(max_length=1, choices=SCHOOL_CHOICES)
-    students_inn = models.CharField(max_length=15, unique=True)
-    guardians_name = models.CharField(max_length=255)
-    guardians_surname = models.CharField(max_length=255)
-    guardians_number = models.IntegerField(max_length=12)
-    guardians_inn = models.CharField(max_length=255)
-    name = models.CharField(max_length=30)
-    surname = models.CharField(max_length=30)
-    middle_name = models.CharField(max_length=30)
-    characteristic = models.TextField()
-    image = models.ImageField(upload_to='students_image')
-    inn = models.CharField(max_length=15, unique=True)
-    nation = models.CharField(max_length=20)
-
-
-class StudentDocument(models.Model):
-
-    inn = models.ForeignKey(Counselor, on_delete=models.CASCADE)
-    class_ = models.CharField(max_length=10)
-    grade = models.IntegerField()
-    subject = models.CharField(50)
+    date_of_birth = models.DateField(null=True)
+    school_name = models.CharField(max_length=255, choices=SCHOOL_CHOICES, null=True)
+    students_inn = models.CharField(max_length=15, unique=True, null=True)
+    guardians_name = models.CharField(max_length=255, null=True)
+    guardians_surname = models.CharField(max_length=255, null=True)
+    guardians_number = models.IntegerField(null=True)
+    guardians_inn = models.CharField(max_length=255, null=True)
+    name = models.CharField(max_length=30, null=True)
+    surname = models.CharField(max_length=30, null=True)
+    middle_name = models.CharField(max_length=30, blank=True, null=True)
+    characteristic = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='students_image', null=True)
+    nation = models.CharField(max_length=20, null=True)
+    counselors_inn = models.CharField(max_length=15, unique=True, null=True)
+    users_inn = models.ForeignKey(Students, on_delete=models.CASCADE, null=True)
+    student_class = models.CharField(max_length=10, null=True)
+    grade = models.IntegerField(null=True)
+    subject = models.CharField(max_length=50, null=True)

@@ -52,6 +52,17 @@ class User(AbstractUser):
     username = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField('email address', unique=True)
     password = models.CharField(max_length=100)
+
+    def activate_with_code(self, code):
+        if str(self.activation_code) != str(code):
+            raise Exception(('code does not match'))
+        self.is_active = True
+        self.activation_code = ''
+        self.save(update_fields=['is_active', 'activation_code'])
+
+    def create_activation_code(self):
+        code = str(uuid.uuid4())
+        self.activation_code = code
     
 
     objects = UserManager()
@@ -73,19 +84,8 @@ class Students(User):
     school = models.ForeignKey(School, on_delete=models.SET_NULL, null=True, blank=True, related_name='school')
     inn = models.CharField(max_length=15, unique=True) 
     activation_code = models.CharField(max_length=36, blank=True)
+    users_reset_code = models.CharField(max_length=36, blank=True)
     is_student = models.BooleanField(default=True)
-
-
-    def activate_with_code(self, code):
-        if str(self.activation_code) != str(code):
-            raise Exception(('code does not match'))
-        self.is_active = True
-        self.activation_code = ''
-        self.save(update_fields=['is_active', 'activation_code'])
-
-    def create_activation_code(self):
-        code = str(uuid.uuid4())
-        self.activation_code = code
 
 
     def is_active(self):
