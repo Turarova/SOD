@@ -29,6 +29,7 @@ class Counselor(models.Model):
 
 class StudentDocument(models.Model):
 
+    inn = models.ForeignKey(Counselor, on_delete=models.CASCADE)
     class_ = models.CharField(max_length=10)
     grade = models.IntegerField()
     subject = models.CharField(50)
