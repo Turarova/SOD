@@ -59,22 +59,6 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    def __str__(self):
-        return self.email
-    
-
-
-
-class Director(User):
-    pass
-
-
-class Students(User):
-    school = models.ForeignKey(School, on_delete=models.SET_NULL, null=True, blank=True, related_name='school')
-    inn = models.CharField(max_length=15, unique=True) 
-    activation_code = models.CharField(max_length=36, blank=True)
-    is_student = models.BooleanField(default=True)
-
 
     def activate_with_code(self, code):
         if str(self.activation_code) != str(code):
@@ -86,6 +70,23 @@ class Students(User):
     def create_activation_code(self):
         code = str(uuid.uuid4())
         self.activation_code = code
+
+
+
+
+    def __str__(self):
+        return self.email
+    
+
+class Director(User):
+    pass
+
+
+class Students(User):
+    school = models.ForeignKey(School, on_delete=models.SET_NULL, null=True, blank=True, related_name='school')
+    inn = models.CharField(max_length=15, unique=True) 
+    activation_code = models.CharField(max_length=36, blank=True)
+    is_student = models.BooleanField(default=True)
 
 
     def is_active(self):

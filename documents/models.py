@@ -1,4 +1,6 @@
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
+
 
 
 class Counselor(models.Model):
@@ -10,25 +12,31 @@ class Counselor(models.Model):
         ('67', '67 школа гимназия')
     )
 
-    date_of_birth = models.DateField(format="%d-%m-%Y", input_formats=['%d-%m-%Y', 'iso-8601'])
-    school_name = models.CharField(max_length=1, choices=SCHOOL_CHOICES)
-    students_inn = models.CharField(max_length=15, unique=True)
-    guardians_name = models.CharField(max_length=255)
-    guardians_surname = models.CharField(max_length=255)
-    guardians_number = models.IntegerField(max_length=12)
-    guardians_inn = models.CharField(max_length=255)
-    name = models.CharField(max_length=30)
-    surname = models.CharField(max_length=30)
-    middle_name = models.CharField(max_length=30)
-    characteristic = models.TextField()
-    image = models.ImageField(upload_to='students_image')
-    inn = models.CharField(max_length=15, unique=True)
-    nation = models.CharField(max_length=20)
+    # date_of_birth = models.DateField(format="%d-%m-%Y", input_formats=['%d-%m-%Y', 'iso-8601'])
+    date_of_birth = models.DateField(blank=True, null=True)
+    school_name = models.CharField(max_length=100, choices=SCHOOL_CHOICES, blank=True, null=True)
+    students_inn = models.CharField(max_length=15, unique=True, blank=True, null=True)
+    guardians_name = models.CharField(max_length=255, blank=True, null=True)
+    guardians_surname = models.CharField(max_length=255, blank=True, null=True)
+    guardians_number = PhoneNumberField(blank=True, null=True)
+    guardians_inn = models.CharField(max_length=255, blank=True, null=True)
+    name = models.CharField(max_length=30, blank=True, null=True)
+    surname = models.CharField(max_length=30, blank=True, null=True)
+    middle_name = models.CharField(max_length=30, blank=True, null=True)
+    characteristic = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='students_image', blank=True, null=True)
+    inn = models.CharField(max_length=15, unique=True, blank=True, null=True)
+    nation = models.CharField(max_length=20, blank=True, null=True)
 
+    def __str__(self):
+        return f"{self.name} {self.surname} - {self.inn}"
 
 class StudentDocument(models.Model):
 
     inn = models.ForeignKey(Counselor, on_delete=models.CASCADE)
-    class_ = models.CharField(max_length=10)
-    grade = models.IntegerField()
-    subject = models.CharField(50)
+    student_class = models.CharField(max_length=10, blank=True, null=True)
+    grade = models.IntegerField(blank=True, null=True)
+    subject = models.CharField(max_length=50, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.inn} {self.student_class}"
