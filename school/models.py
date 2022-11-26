@@ -46,12 +46,13 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-class Director(AbstractUser):
 
-    username = models.CharField(max_length=255, null=True, blank=True)
+
+class User(AbstractUser):
+    username = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField('email address', unique=True)
     password = models.CharField(max_length=100)
-    is_active = models.BooleanField('active', default=True)
+    
 
     objects = UserManager()
 
@@ -60,28 +61,19 @@ class Director(AbstractUser):
 
     def __str__(self):
         return self.email
+    
 
 
 
+class Director(User):
+    pass
 
 
-class Students(AbstractUser):
-    school = models.ForeignKey(School, on_delete=models.SET_NULL, null=True, blank=True)
-    username = models.CharField(max_length=255, null=True, blank=True)
-    email = models.EmailField('email address', unique=True)
-    password = models.CharField(max_length=100)
+class Students(User):
+    school = models.ForeignKey(School, on_delete=models.SET_NULL, null=True, blank=True, related_name='school')
     inn = models.CharField(max_length=15, unique=True) 
-    is_active = models.BooleanField('active', default=False)
     activation_code = models.CharField(max_length=36, blank=True)
-
-
-    objects = UserManager()
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
-
-    def __str__(self):
-        return self.email
+    is_student = models.BooleanField(default=True)
 
 
     def activate_with_code(self, code):
@@ -96,12 +88,11 @@ class Students(AbstractUser):
         self.activation_code = code
 
 
+    def is_active(self):
+        if self.is_student == True:
+            self.is_active = False
+            self.save(update_fields=['is_active'])
 
 
-
-
-
-
-
-class PasswordReset(models.Model):
-    email = models.EmailField()
+# class PasswordReset(models.Model):
+#     email = models.EmailField()
