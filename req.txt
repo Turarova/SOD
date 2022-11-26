@@ -8,11 +8,8 @@ Pillow
 psycopg2-binary
 PyJWT
 python-decouple
-<<<<<<< HEAD
-=======
 Babel
 drf-yasg
->>>>>>> 199234feabc07cf51f427e97f7e171ca0a3bad7d
 
 celery
 django-celery-beat
