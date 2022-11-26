@@ -6,4 +6,6 @@ from .models import *
 class Counselor(serializers.ModelSerializer):
     class Meta:
         model = StudentDocument
-        exclude = ('id', 'grade', 'subject', 'counselors_inn', 'users_inn')
+        exclude = ('grade', 'subject', 'counselors_inn', 'users_inn')
+
+        

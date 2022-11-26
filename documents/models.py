@@ -47,7 +47,7 @@ class StudentDocument(models.Model):
     surname = models.CharField(max_length=30, null=True)
     middle_name = models.CharField(max_length=30, blank=True, null=True)
     characteristic = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='students_image', null=True)
+    image = models.ImageField(null=True) #upload_to='students_image',
     nation = models.CharField(max_length=20, null=True)
     counselors_inn = models.CharField(max_length=15, unique=True, null=True)
     users_inn = models.ForeignKey(Students, on_delete=models.CASCADE, null=True)
