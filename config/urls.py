@@ -17,6 +17,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
+<<<<<<< HEAD
 from rest_framework import routers
 from documents.views import DocumentViewSet
 from drf_yasg.views import get_schema_view
@@ -41,3 +42,10 @@ urlpatterns = [
     path('', include(router.urls)),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+=======
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('school/', include('school.urls')),
+]
+>>>>>>> 177fbe873228e886dd0534ae13e51ec530cdda1d
