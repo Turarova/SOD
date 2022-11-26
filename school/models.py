@@ -67,9 +67,10 @@ class User(AbstractUser):
 
 class Director(User):
     pass
+    
 
 
-class Students(User):
+class Student(User):
     school = models.ForeignKey(School, on_delete=models.SET_NULL, null=True, blank=True, related_name='school')
     inn = models.CharField(max_length=15, unique=True) 
     activation_code = models.CharField(max_length=36, blank=True)
