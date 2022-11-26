@@ -2,17 +2,14 @@ from django.contrib import admin
 from django import forms
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
-from .models import Counselor, StudentDocument
+from .models import StudentDocument
 
-class CounselorForm(forms.ModelForm):
+class StudentDocumentForm(forms.ModelForm):
     class Meta:
         widgets = {                         
             'phone': PhoneNumberPrefixWidget(initial='US'),
         }
 
-@admin.register(Counselor)
-class CounselorAdmin(admin.ModelAdmin):
-    form = CounselorForm
-
-admin.site.register(StudentDocument)
-
+@admin.register(StudentDocument)
+class StudentDocumentAdmin(admin.ModelAdmin):
+    form = StudentDocumentForm

@@ -92,6 +92,9 @@ class Students(User):
         if self.is_student == True:
             self.is_active = False
             self.save(update_fields=['is_active'])
+    
+    def __str__(self):
+        return self.inn
 
 
 # class PasswordReset(models.Model):

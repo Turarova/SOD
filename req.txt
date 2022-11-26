@@ -10,3 +10,9 @@ PyJWT
 python-decouple
 Babel
 drf-yasg
+
+celery
+django-celery-beat
+django-celery-results
+django-redis
+redis
