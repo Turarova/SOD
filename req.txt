@@ -7,3 +7,9 @@ Pillow
 psycopg2-binary
 PyJWT
 python-decouple
+
+celery
+django-celery-beat
+django-celery-results
+django-redis
+redis

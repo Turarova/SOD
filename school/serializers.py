@@ -3,12 +3,15 @@ from rest_framework.serializers import ModelSerializer, CharField, Serializer, U
 from django.forms import ValidationError
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
+from rest_framework import serializers
 
+from .tasks import send_pass_res
+from .models import PasswordReset
 
-# from .models import Student, Director
 from documents.models import Counselor
 
-# from account.models import ResetPassword
+import random
+import string
 
 User = get_user_model()
 
@@ -37,50 +40,47 @@ class StudentRegisterSerializer(ModelSerializer):
 
 
     def create(self, validated_data):
+        # inn = self.validate_inn()
+        # school_name = Counselor.objects.get(inn)
+        print("VALIDATED_DATA", validated_data)
         return User.objects.create_user(**validated_data)
 
-# or not str(value).startswith('2')
-    # def school_name(self):
-    #     inn = self.validate_inn()
-    #     school_name = Counselor.objects.get(inn)
-    #     print("SCHOOL_NAME=>", school_name['school_name'])
-    #     return school_name['school_name']
 
-
-    # def create(self, validated_data):
-    #     print("VALIDATED_DATA=>", validated_data)
-    #     # user = User.objects.create_user(**validated_data)
-    #     user = super().save(commit=False)
-    #     user.is_student = True
-    #     user.activate()
-    #     user.save()
-    #     student = Student.objects.create(user = user)
-    #     student.create_activation_code()
-    #     inn = self.validate_inn()
-    #     school_name = Counselor.objects.get(inn)
-    #     print("SCHOOL_NAME=>", school_name['school_name'])
-    #     student.inn.add(inn)
-    #     student.school.add(school_name['school_name'])
-    #     return user
-
-
-        # return Student.objects.create_user(**validated_data)
-
-
-
-# class DirectorRegisterSerializer(ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = '__all__'
-    
-#     def save(self, commit=True):
-#         user = super().save(commit=False)
-#         user.is_director = True
-#         if commit:
-#             user.save()
-#         return user
-
+class ActivationSerializer(Serializer):
+    activation_code = CharField(required=True, write_only=True, max_length=255)
 
 
 class LoginSerializer(TokenObtainPairSerializer):
     pass
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    model = User
+
+    """
+    Serializer for password change endpoint.
+    """
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True,
+                                         min_length=8, write_only=True)
+
+
+class PasswordResetEmailSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = PasswordReset
+        fields = '__all__'
+
+    def validate(self, attrs):
+        try:
+            email = attrs.get('email')
+            if User.objects.filter(email=email).exists():
+                print(2)
+                user = User.objects.get(email=email)
+                new_password = ''.join((random.choice(string.ascii_lowercase + string.digits)) for x in range(8))
+                print(3)
+                send_pass_res.delay(user.email, new_password)
+                print(4)
+            return attrs
+        except Exception as e:
+            raise ValidationError()
