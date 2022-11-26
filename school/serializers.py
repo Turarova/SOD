@@ -8,7 +8,6 @@ from rest_framework import serializers
 from .tasks import send_pass_res
 from .models import PasswordReset
 
-from documents.models import Counselor
 
 import random
 import string
@@ -66,7 +65,7 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 
 class PasswordResetEmailSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = PasswordReset
         fields = '__all__'

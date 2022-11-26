@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'rest_framework', 
+    'phonenumber_field',
+    'rest_framework',
+    'drf_yasg', 
     'school',
     'documents',
 ]
@@ -87,6 +89,14 @@ DATABASES = {
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': 'localhost',
         'PORT': '5432'    
+    },
+    'kundoluk': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB2_NAME'),
+        'USER': config('DB2_USER'),
+        'PASSWORD': config('DB2_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '5432'    
     }
 }
 
@@ -125,6 +135,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 STATIC_URL = 'static/'
 
 # Default primary key field type
@@ -133,7 +146,25 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+AUTH_USER_MODEL = 'school.User'
 
+
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_RESULT_BACKEND = 'django-db'
+
+# celery setting.
+CELERY_CACHE_BACKEND = 'default'
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': "redis://127.0.0.1:6379/1",
+    }
+}
+
+<<<<<<< HEAD
 AUTH_USER_MODEL = 'school.User'
 
 
@@ -195,3 +226,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = config('EMAIL_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_PASS')
+=======
+# Celery Configuration Options
+CELERY_TIMEZONE = "Asia/Bishkek"
+>>>>>>> 199234feabc07cf51f427e97f7e171ca0a3bad7d
