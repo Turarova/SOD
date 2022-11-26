@@ -1,32 +1,6 @@
 from django.db import models
 from school.models import Students
 
-
-# class Counselor(models.Model):
-    # SCHOOL_CHOICES = (
-    #     ('1', 'Аламединская 1'),
-    #     ('38', '38 Гимназия'),
-    #     ('Айчурок', 'Айчурок'),
-    #     ('61', '61 школа'),
-    #     ('67', '67 школа гимназия')
-    # )
-
-    # date_of_birth = models.DateField(format="%d-%m-%Y", input_formats=['%d-%m-%Y', 'iso-8601'])
-    # school_name = models.CharField(max_length=1, choices=SCHOOL_CHOICES)
-    # students_inn = models.CharField(max_length=15, unique=True)
-    # guardians_name = models.CharField(max_length=255)
-    # guardians_surname = models.CharField(max_length=255)
-    # guardians_number = models.IntegerField(max_length=12)
-    # guardians_inn = models.CharField(max_length=255)
-    # name = models.CharField(max_length=30)
-    # surname = models.CharField(max_length=30)
-    # middle_name = models.CharField(max_length=30)
-    # characteristic = models.TextField()
-    # image = models.ImageField(upload_to='students_image')
-    # inn = models.CharField(max_length=15, unique=True)
-    # nation = models.CharField(max_length=20)
-
-
 class StudentDocument(models.Model):
     SCHOOL_CHOICES = (
         ('1', 'Аламединская 1'),
@@ -58,3 +32,6 @@ class StudentDocument(models.Model):
     quarters_4_grade = models.IntegerField( blank=True,null=True)
     years_grade = models.IntegerField( blank=True,null=True)
     subject = models.CharField(max_length=50, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.surname} {self.name} {self.users_inn}'
