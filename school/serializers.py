@@ -33,24 +33,54 @@ class StudentRegisterSerializer(ModelSerializer):
     def validate_inn(self, value):
         if not str(value).isdigit():
             raise ValidationError('INN must be number')
-        if not str(value).startswith('1'):
+        if not str(value).startswith('1') and not str(value).startswith('2'):
             raise ValidationError('INN must start with 1 or 2')
         return value
 
 
     def create(self, validated_data):
-        # inn = self.validate_inn()
-        # school_name = Counselor.objects.get(inn)
-        print("VALIDATED_DATA", validated_data)
         return User.objects.create_user(**validated_data)
+
+
+class DirectorRegisterSerializer(ModelSerializer):
+    password = CharField(min_length=6, required=True, write_only=True)
+    
+    
+    class Meta:
+        model = User
+        fields = ('email', 'password')
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise ValidationError('Director with this email already exists')
+        return value
+    
+    def create(self, validated_data):
+        return User.objects.create_user(**validated_data)
+        
 
 
 class ActivationSerializer(Serializer):
     activation_code = CharField(required=True, write_only=True, max_length=255)
 
 
-class LoginSerializer(TokenObtainPairSerializer):
-    pass
+class LoginStudentSerializer(TokenObtainPairSerializer):
+    inn = CharField(required=True, write_only=True, min_length=True)
+
+    class Meta:
+        model = User
+        fields = '__all__' 
+
+
+class LoginDirectorSerializer(TokenObtainPairSerializer):
+
+    class Meta:
+        model = User
+        fields = '__all__'
+
+    def validate_email(self, value):
+        if User.objects.get(email=value).is_student != False:
+            raise ValidationError('Director with this email doesn\'t exists')
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -74,12 +104,12 @@ class PasswordResetEmailSerializer(serializers.ModelSerializer):
         try:
             email = attrs.get('email')
             if User.objects.filter(email=email).exists():
-                print(2)
                 user = User.objects.get(email=email)
                 new_password = ''.join((random.choice(string.ascii_lowercase + string.digits)) for x in range(8))
-                print(3)
                 send_pass_res.delay(user.email, new_password)
-                print(4)
+                user.password = new_password
+                user.set_password(new_password)
+                user.save()
             return attrs
         except Exception as e:
             raise ValidationError()

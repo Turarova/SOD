@@ -15,22 +15,29 @@ User = get_user_model()
 
 class StudentRegisterView(APIView):
     def post(self, request):
-        print(2)
         serializer = StudentRegisterSerializer(data=request.data)
-        print(3)
         if serializer.is_valid(raise_exception=True):
-            print(4)
             user = serializer.save()
-            print(5)
             send_confirmation_email.delay(user.email, user.activation_code)
-            print(6)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 
-class LoginView(TokenObtainPairView):
-    serializer_class = LoginSerializer
+class DirectorRegisterView(APIView):
+    def post(self, request):
+        serializer = DirectorRegisterSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            user = serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
+
+class LoginStudentView(TokenObtainPairView):
+    serializer_class = LoginStudentSerializer
+
+
+class LoginDirectorView(TokenObtainPairView):
+    serializer_class = LoginDirectorSerializer
 
 
 class ActivationView(APIView):

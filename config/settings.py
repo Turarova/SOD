@@ -164,8 +164,6 @@ CACHES = {
     }
 }
 
-<<<<<<< HEAD
-AUTH_USER_MODEL = 'school.User'
 
 
 REDIS_HOST = 'localhost'
@@ -226,7 +224,3 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = config('EMAIL_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_PASS')
-=======
-# Celery Configuration Options
-CELERY_TIMEZONE = "Asia/Bishkek"
->>>>>>> 199234feabc07cf51f427e97f7e171ca0a3bad7d
