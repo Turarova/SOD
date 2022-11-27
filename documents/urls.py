@@ -1,7 +1,10 @@
 from django.urls import path, include
 
-from .views import parse_grades
+from .views import *
 
 urlpatterns = [
-    path('test/', parse_grades),
+    path('parse_grades/', parse_grades),
+    path('students_rating/', students_rating),
+    path('schools_rating/', schools_rating),
+    path('', write_db),
 ]

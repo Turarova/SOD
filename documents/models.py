@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from phonenumber_field.modelfields import PhoneNumberField
 
+from school.models import School
+
 User = get_user_model()
 
 # class Counselor(models.Model):
@@ -30,6 +32,7 @@ User = get_user_model()
 
 
 class StudentDocument(models.Model):
+
     SCHOOL_CHOICES = (
         ('1', 'Аламединская 1'),
         ('38', '38 Гимназия'),
@@ -41,6 +44,7 @@ class StudentDocument(models.Model):
     # date_of_birth = models.DateField(format="%d-%m-%Y", input_formats=['%d-%m-%Y', 'iso-8601'])
     date_of_birth = models.DateField(blank=True, null=True)
     school_name = models.CharField(max_length=255, choices=SCHOOL_CHOICES, blank=True, null=True)
+    school = models.ForeignKey(School, on_delete=models.SET_NULL, blank=True, null=True, related_name='docs')
     students_inn = models.CharField(max_length=15, unique=True, blank=True, null=True)
     guardians_name = models.CharField(max_length=255, blank=True, null=True)
     guardians_surname = models.CharField(max_length=255, blank=True, null=True)
@@ -52,7 +56,6 @@ class StudentDocument(models.Model):
     characteristic = models.TextField(blank=True, null=True)
     image = models.ImageField(blank=True, null=True) #upload_to='students_image',
     nation = models.CharField(max_length=20, blank=True, null=True)
-    counselors_inn = models.CharField(max_length=15, unique=True, blank=True, null=True)
     users_inn = models.CharField(max_length=15, unique=True, blank=True, null=True)
     student_class = models.CharField(max_length=10, blank=True, null=True)
     quarters_1_grade = models.IntegerField(blank=True,null=True)
@@ -61,3 +64,6 @@ class StudentDocument(models.Model):
     quarters_4_grade = models.IntegerField(blank=True,null=True)
     years_grade = models.IntegerField(blank=True,null=True)
     subject = models.CharField(max_length=50, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.users_inn)

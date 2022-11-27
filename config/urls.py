@@ -22,10 +22,6 @@ from documents.views import DocumentViewSet
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-
-router = routers.SimpleRouter()
-router.register('documents', DocumentViewSet)
-
 schema_view = get_schema_view(
     openapi.Info(
         title='SOD',
@@ -35,12 +31,15 @@ schema_view = get_schema_view(
     public=True
 )
 
+router = routers.SimpleRouter()
+router.register('documents', DocumentViewSet)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
+    path('school/', include('school.urls')),
+    path('documents/export/', include('documents.urls')),
     path('docs/', include('documents.urls')),
     path('', include(router.urls)),
-    path('school/', include('school.urls')),
-
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
