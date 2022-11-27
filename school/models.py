@@ -8,7 +8,6 @@ class School(models.Model):
     name = models.CharField(max_length=255)
 
 
-
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -19,8 +18,7 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        if user.is_student != True:
-            user.create_activation_code()
+        user.create_activation_code()
         user.save(using=self._db)
         return user
 
@@ -55,8 +53,8 @@ class User(AbstractUser):
     password = models.CharField(max_length=100)
     school = models.ForeignKey(School, on_delete=models.SET_NULL, null=True, blank=True, related_name='school')
     inn = models.CharField(max_length=15, unique=True) 
-    activation_code = models.CharField(max_length=36, blank=True)
-    is_active = models.BooleanField(default=False)
+    # activation_code = models.CharField(max_length=36, blank=True)
+    is_active = models.BooleanField(default=True)
     is_student = models.BooleanField('student status', default=True, blank=True)
 
     objects = UserManager()
@@ -65,12 +63,12 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
 
-    def activate_with_code(self, code):
-        if str(self.activation_code) != str(code):
-            raise Exception(('code does not match'))
-        self.is_active = True
-        self.activation_code = ''
-        self.save(update_fields=['is_active', 'activation_code'])
+    # def activate_with_code(self, code):
+    #     if str(self.activation_code) != str(code):
+    #         raise Exception(('code does not match'))
+    #     self.is_active = True
+    #     self.activation_code = ''
+    #     self.save(update_fields=['is_active', 'activation_code'])
 
 
     def create_activation_code(self):
@@ -79,38 +77,10 @@ class User(AbstractUser):
             self.activation_code = code
         
 
-
     def __str__(self):
         return self.email
     
 
 
-
-# class Director(models.Model):
-#     director_user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-
-# class Student(models.Model):
-#     school = models.ForeignKey(School, on_delete=models.SET_NULL, null=True, blank=True, related_name='school')
-#     inn = models.CharField(max_length=15, unique=True) 
-#     activation_code = models.CharField(max_length=36, blank=True)
-#     student_user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-
-#     def activate_with_code(self, code):
-#         if str(self.activation_code) != str(code):
-#             raise Exception(('code does not match'))
-#         # self.is_active = True
-#         self.activation_code = ''
-#         self.save(update_fields=['activation_code'])
-
-#     def create_activation_code(self):
-#         code = str(uuid.uuid4())
-#         self.activation_code = code
-
-
-    
-
-
-# class PasswordReset(models.Model):
-#     email = models.EmailField()
+class PasswordReset(models.Model):
+    email = models.EmailField()
