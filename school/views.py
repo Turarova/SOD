@@ -15,11 +15,8 @@ User = get_user_model()
 
 class StudentRegisterView(APIView):
     def post(self, request):
-        print(2)
         serializer = StudentRegisterSerializer(data=request.data)
-        print(3)
         if serializer.is_valid(raise_exception=True):
-            print(4)
             user = serializer.save()
             print(5)
             send_confirmation_email.delay(user.email, user.activation_code)
