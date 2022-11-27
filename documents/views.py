@@ -1,13 +1,18 @@
+from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+
+from school.models import School
 
 from .kundoluk_db import KundolukDbStudent
 from .models import StudentDocument
 from .permissions import IsDirector
 from .serializers import StudentDocumentSerializer
 from .tasks import parse_grades
+
+User = get_user_model()
 
 
 class DocumentViewSet(ModelViewSet):
@@ -39,3 +44,42 @@ def parse_grades(request):
     #             break
     
     # return Response('ok')
+
+# @api_view(['GET'])
+# def school_rating(request):
+#     schools = School.objects.all()
+#     users = User.objects.all()
+#     if 
+
+
+#     return Response('ok')
+
+@api_view(['GET'])
+def students_rating(request):
+    schools = School.objects.all()
+    students = StudentDocument.objects.all()
+    top = []
+    for student in students:
+        gpa = f'{student.users_inn.inn} {student.years_grade}'
+        top.append(gpa)
+    
+    top.sort(reverse=True)
+
+    return Response(top)
+
+@api_view(['GET'])
+def schools_rating(request):
+    grades = []
+    schools = School.objects.all()
+    students = StudentDocument.objects.all()
+
+    for student in students:
+        grades.append(student.years_grade)
+    
+    average_rating = sum(grades) // len(grades)
+
+    return Response(average_rating)
+
+
+        
+    
