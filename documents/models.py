@@ -1,7 +1,8 @@
 from django.db import models
-from school.models import Students
+from school.models import User, School
 
 class StudentDocument(models.Model):
+
     SCHOOL_CHOICES = (
         ('1', 'Аламединская 1'),
         ('38', '38 Гимназия'),
@@ -23,8 +24,8 @@ class StudentDocument(models.Model):
     characteristic = models.TextField(blank=True, null=True)
     image = models.ImageField(null=True) #upload_to='students_image',
     nation = models.CharField(max_length=20, blank=True, null=True)
-    counselors_inn = models.CharField(max_length=15, unique=True, blank=True, null=True)
-    users_inn = models.ForeignKey(Students, on_delete=models.CASCADE, blank=True, null=True)
+    # counselors_inn = models.CharField(max_length=15, unique=True, blank=True, null=True)
+    users_inn = models.ForeignKey(User, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='users_inn')
     student_class = models.CharField(max_length=10, blank=True, null=True)
     quarters_1_grade = models.IntegerField( blank=True,null=True)
     quarters_2_grade = models.IntegerField( blank=True,null=True)
@@ -34,4 +35,4 @@ class StudentDocument(models.Model):
     subject = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.surname} {self.name} {self.users_inn}'
+        return str(self.users_inn)

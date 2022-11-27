@@ -8,7 +8,6 @@ class School(models.Model):
     name = models.CharField(max_length=255)
 
 
-
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -55,8 +54,8 @@ class User(AbstractUser):
     password = models.CharField(max_length=100)
     school = models.ForeignKey(School, on_delete=models.SET_NULL, null=True, blank=True, related_name='school')
     inn = models.CharField(max_length=15, unique=True) 
-    activation_code = models.CharField(max_length=36, blank=True)
-    is_active = models.BooleanField(default=False)
+    # activation_code = models.CharField(max_length=36, blank=True)
+    is_active = models.BooleanField(default=True)
     is_student = models.BooleanField('student status', default=True, blank=True)
 
     objects = UserManager()
@@ -65,18 +64,18 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
 
-    def activate_with_code(self, code):
-        if str(self.activation_code) != str(code):
-            raise Exception(('code does not match'))
-        self.is_active = True
-        self.activation_code = ''
-        self.save(update_fields=['is_active', 'activation_code'])
+    # def activate_with_code(self, code):
+    #     if str(self.activation_code) != str(code):
+    #         raise Exception(('code does not match'))
+    #     self.is_active = True
+    #     self.activation_code = ''
+    #     self.save(update_fields=['is_active', 'activation_code'])
 
 
-    def create_activation_code(self):
-        code = str(uuid.uuid4())
-        if self.is_student == True:
-            self.activation_code = code
+    # def create_activation_code(self):
+    #     code = str(uuid.uuid4())
+    #     if self.is_student == True:
+    #         self.activation_code = code
         
 
 

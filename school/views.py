@@ -4,7 +4,6 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-
 from django.shortcuts import get_object_or_404
 
 from .serializers import *
@@ -14,13 +13,9 @@ from .serializers import *
 
 class StudentRegisterView(APIView):
     def post(self, request):
-        print(2)
         serializer = StudentRegisterSerializer(data=request.data)
-        print(3)
         if serializer.is_valid(raise_exception=True):
-            print(4)
             user = serializer.save()
-            print(5)
             # send_confirmation_email(user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 

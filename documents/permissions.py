@@ -1,15 +1,13 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
-
+from school.models import User
 
 class IsDirector(BasePermission):
     def has_object_permission(self, request, view, obj):
-        if request.method in ['PUT','PATCH','DELETE','HEAD','OPTIONS']:
-            return request.user.is_staff
+        if not request.user.is_student:
+            return request.user
 
 
 class IsStudentsDocument(BasePermission):
     def has_object_permission(self, request, view, obj):
-        print("OBJ", obj)
-        print("VIEW",view)
         if request.method == 'GET':
-            return request.user.is_staff or obj.user == request.user
+            return not request.user.is_student or obj.users_inn == request.user
