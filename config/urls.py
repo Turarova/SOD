@@ -24,7 +24,7 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
     openapi.Info(
-        title='FULLSTACK',
+        title='SOD',
         default_version='v1',
         description='chto=to',
     ),
@@ -38,8 +38,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
     path('school/', include('school.urls')),
-    path('account/', include('school.urls')),
     path('documents/export/', include('documents.urls')),
+    path('docs/', include('documents.urls')),
     path('', include(router.urls)),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

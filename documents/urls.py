@@ -1,6 +1,7 @@
 from django.urls import path
-from . import views
+from .views import *
 
 urlpatterns = [
-    path('', views.write_db),
+    path('', write_db),
+    path('test/', parse_grades),
 ]
